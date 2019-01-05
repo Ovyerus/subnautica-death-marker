@@ -1,0 +1,12 @@
+﻿{
+  "Id": "DeathMarker",
+  "DisplayName": "Death Marker",
+  "Author": "Ovyerus",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "SubnauticaDeathMarker.dll",
+  "EntryMethod": "SubnauticaDeathMarker.SubnauticaDeathMarker.Main",
+  "Config": {
+	"AddCoords": true
+  }
+}
