@@ -30,7 +30,7 @@ namespace SubnauticaDeathMarker
     [HarmonyPatch("OnKill")]
     [HarmonyPatch(new Type[] { typeof(DamageType) })]
     public class PlayerPatcher {
-        static void Prefix(DamageType damageType)
+        static void Postfix(DamageType damageType)
         {
             Console.WriteLine("[DeathMarker] yeah he died lmao im dying xd");
 
@@ -38,13 +38,19 @@ namespace SubnauticaDeathMarker
             GameObject pingBase = new GameObject();
             GameObject pingModel = GameObject.Instantiate(Resources.Load<GameObject>("WorldEntities/Tools/DiveReelNode"));
             PingInstance ping = pingBase.AddComponent<PingInstance>();
+            Light pingLight = pingModel.AddComponent<Light>();
+
+            // Set options for the light.
+            pingLight.color = new Color(112 / 255, 255 / 255, 3 / 255, 0.25f);
+            pingLight.type = LightType.Point;
+            pingLight.range = 10f;
 
             pingBase.AddComponent<DeathMarkerDisc>();
-            //pingModel.transform.SetParent(pingBase.transform);
+            pingModel.transform.SetParent(pingBase.transform);
+            pingLight.transform.SetParent(pingModel.transform);
 
             // Set the ping to the player's position at death.
             pingBase.transform.position = playerCam.transform.position;
-            pingModel.transform.position = pingBase.transform.position;
 
             // Set information about the ping.
             ping.enabled = false;
