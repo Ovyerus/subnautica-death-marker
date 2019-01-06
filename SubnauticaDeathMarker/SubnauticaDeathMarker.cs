@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Reflection;
+using System.IO;
 using Harmony;
 using UnityEngine;
 using SMLHelper.V2.Handlers;
+using Oculus.Newtonsoft.Json;
 
 namespace SubnauticaDeathMarker
 {
+    using ConfigClasses;
+
     public class SubnauticaDeathMarker
     {
         public static string InteractText = "RemoveDeathMarker";
+        public static ConfigJson Config;
 
         public static void Main()
         {
+            string serialisedConfig = File.ReadAllText("./QMods/SubnauticaDeathMarker/mod.json");
+            Config = JsonConvert.DeserializeObject<ModJson>(serialisedConfig).Config;
+
             HarmonyInstance harmony = HarmonyInstance.Create("ovyerus.DeathMarker.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             LanguageHandler.SetLanguageLine(InteractText, "Remove Death Marker");
+            Console.WriteLine("[DeathMarker] Successfully loaded.");
         }
     }
 
@@ -47,7 +56,8 @@ namespace SubnauticaDeathMarker
             pingCollider.transform.SetParent(pingModel.transform);
 
             // Set the ping to the player's position at death.
-            pingBase.transform.position = playerCam.transform.position;
+            Vector3 playerPos = playerCam.transform.position;
+            pingBase.transform.position = playerPos;
 
             // Set information about the ping.
             ping.enabled = false;
@@ -55,7 +65,10 @@ namespace SubnauticaDeathMarker
             ping.origin = pingBase.transform;
             ping.colorIndex = 0;
             ping.visible = true;
-            ping.SetLabel("Death");
+
+            if (SubnauticaDeathMarker.Config.AddCoords) ping.SetLabel($"Death ({playerPos.x:F1}, {playerPos.y:F1}, {playerPos.z:F1})");
+            else ping.SetLabel("Death");
+
             ping.enabled = true;
 
             pingInteractor.Ping = ping;
