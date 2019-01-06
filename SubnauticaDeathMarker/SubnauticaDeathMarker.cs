@@ -17,13 +17,6 @@ namespace SubnauticaDeathMarker
 
             LanguageHandler.SetLanguageLine(InteractText, "Remove Death Marker");
         }
-
-        public static void NotifyOfPing(PingInstance ping)
-        {
-            PingManager.NotifyRename(ping);
-            PingManager.NotifyColor(ping);
-            PingManager.NotifyVisible(ping);
-        }
     }
 
     [HarmonyPatch(typeof(Player))]
@@ -39,15 +32,19 @@ namespace SubnauticaDeathMarker
             GameObject pingModel = GameObject.Instantiate(Resources.Load<GameObject>("WorldEntities/Tools/DiveReelNode"));
             PingInstance ping = pingBase.AddComponent<PingInstance>();
             Light pingLight = pingModel.AddComponent<Light>();
+            SphereCollider pingCollider = pingModel.AddComponent<SphereCollider>();
+            DeathMarkerInteractor pingInteractor = pingModel.AddComponent<DeathMarkerInteractor>();
+
+            pingCollider.radius = 0.35f;
 
             // Set options for the light.
             pingLight.color = new Color(112 / 255, 255 / 255, 3 / 255, 0.25f);
             pingLight.type = LightType.Point;
             pingLight.range = 10f;
 
-            pingBase.AddComponent<DeathMarkerDisc>();
             pingModel.transform.SetParent(pingBase.transform);
             pingLight.transform.SetParent(pingModel.transform);
+            pingCollider.transform.SetParent(pingModel.transform);
 
             // Set the ping to the player's position at death.
             pingBase.transform.position = playerCam.transform.position;
@@ -61,7 +58,9 @@ namespace SubnauticaDeathMarker
             ping.SetLabel("Death");
             ping.enabled = true;
 
-            SubnauticaDeathMarker.NotifyOfPing(ping);
+            pingInteractor.Ping = ping;
+
+            PingManager.Register(ping);
         }
     }
 }
