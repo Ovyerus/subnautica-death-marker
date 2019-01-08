@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SubnauticaDeathMarker
+﻿namespace SubnauticaDeathMarker
 {
     class DeathMarkerInteractor : HandTarget, IHandTarget
     {
