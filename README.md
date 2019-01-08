@@ -4,7 +4,7 @@ A mod for Subnautica that creates a beacon at your position when you die.
 
 ## Installation
 Install [QModManager](https://www.nexusmods.com/subnautica/mods/16) and [SMLHelper (V2)](https://www.nexusmods.com/subnautica/mods/113)
-Get the latest release on [NexusMods]() or the [GitHub releases](/releases), and extract the contents of the zip to your `QMods` folder.
+Get the latest release on [NexusMods](https://www.nexusmods.com/subnautica/mods/181/) or the [GitHub releases](/releases), and extract the contents of the zip to your `QMods` folder.
 
 ## Development
 Clone/fork this repository and make your changes.  
